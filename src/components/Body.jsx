@@ -1,24 +1,42 @@
 import RestaurantCard from "./RestaurantCard.jsx";
 import SearchBar from "./SearchBar.jsx";
-import { restaurantData } from "../utils/ResData.js";
 import FilterBtn from "./FilterBtn.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Body = () => {
-  const [resturantList, setResturantList] = useState(restaurantData);
+  const [resturantList, setResturantList] = useState([]);
+  const [dummyList, setDummyList] = useState([]);
   const [isfiltered, setIsFiltered] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
+
+    const json = await data.json();
+
+    const resListFromAPI =
+      json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants;
+
+    console.log(resListFromAPI);
+
+    setResturantList(resListFromAPI);
+    setDummyList(resListFromAPI);
+  };
 
   function toggleFilter() {
     if (isfiltered) {
-      setResturantList(restaurantData);
+      setDummyList(resturantList);
       setIsFiltered(false);
     } else {
-      const filteredList = restaurantData.filter(
-        (res) => res.info.avgRating >= 4.4
-      );
+      const filteredList = dummyList.filter((res) => res.info.avgRating >= 4.4);
 
       setIsFiltered(!isfiltered);
-      setResturantList(filteredList);
+      setDummyList(filteredList);
     }
   }
 
@@ -38,9 +56,15 @@ const Body = () => {
         </button>
       </div>
       <div className="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8  2xl:grid-cols-8">
-        {resturantList.map((res, index) => (
-          <RestaurantCard key={index} resData={res} />
-        ))}
+        {dummyList.length === 0 ? (
+          <h1 className="text-white text-[5rem] mt-[10rem] relative ml-[4rem]">
+            Loading....
+          </h1>
+        ) : (
+          dummyList.map((res, index) => (
+            <RestaurantCard key={index} resData={res} />
+          ))
+        )}
       </div>
     </div>
   );
