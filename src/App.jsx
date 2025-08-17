@@ -3,7 +3,7 @@ import Body from "./components/Body";
 
 function App() {
   return (
-    <div className="bg-[#363f4a] h-[110vh]">
+    <div className="bg-[#363f4a] h-full">
       <div className="p-4">
         <Header />
         <Body />
