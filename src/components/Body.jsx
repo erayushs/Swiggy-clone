@@ -2,6 +2,7 @@ import RestaurantCard from "./RestaurantCard.jsx";
 import SearchBar from "./SearchBar.jsx";
 import FilterBtn from "./FilterBtn.jsx";
 import { useEffect, useState } from "react";
+import Shimmer from "../Shimmer.jsx";
 
 const Body = () => {
   const [resturantList, setResturantList] = useState([]);
@@ -42,7 +43,9 @@ const Body = () => {
     }
   }
 
-  return (
+  return dummyList.length === 0 || dummyList === undefined ? (
+    <Shimmer />
+  ) : (
     <div className="">
       {/* {console.log("JSX Rendered:" + dummyList.length)} */}
       <div className="flex items-center gap-8">
@@ -59,15 +62,9 @@ const Body = () => {
         </button>
       </div>
       <div className="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8  2xl:grid-cols-8">
-        {dummyList.length === 0 || dummyList === undefined ? (
-          <h1 className="text-white text-[5rem] mt-[10rem] relative ml-[4rem]">
-            Loading....
-          </h1>
-        ) : (
-          dummyList.map((res, index) => (
-            <RestaurantCard key={index} resData={res} />
-          ))
-        )}
+        {dummyList.map((res, index) => (
+          <RestaurantCard key={index} resData={res} />
+        ))}
       </div>
     </div>
   );

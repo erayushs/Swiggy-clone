@@ -4,13 +4,10 @@ const RestaurantCard = ({ resData }) => {
   const API =
     "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
 
-  // console.log(resData);
-  // console.log(resData?.info);
-
   const { name, avgRating, cuisines, sla, cloudinaryImageId } = resData?.info;
 
   return (
-    <div className="border-[#393c49]">
+    <div>
       <div className="w-[220px]  rounded-xl bg-[#202a36]">
         <img
           src={CDN_URL + cloudinaryImageId}
