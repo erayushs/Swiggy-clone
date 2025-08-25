@@ -1,6 +1,6 @@
 import RestaurantCard from "./RestaurantCard.jsx";
-import SearchBar from "./SearchBar.jsx";
 import FilterBtn from "./FilterBtn.jsx";
+import SearchBar from "./SearchBar.jsx";
 import { useEffect, useState } from "react";
 import Shimmer from "../Shimmer.jsx";
 
@@ -8,6 +8,7 @@ const Body = () => {
   const [resturantList, setResturantList] = useState([]);
   const [dummyList, setDummyList] = useState([]);
   const [isfiltered, setIsFiltered] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -36,10 +37,12 @@ const Body = () => {
       setDummyList(resturantList);
       setIsFiltered(false);
     } else {
-      const filteredList = dummyList.filter((res) => res.info.avgRating >= 4.4);
+      const filteredList = resturantList.filter(
+        (res) => res.info.avgRating >= 4.4
+      );
 
-      setIsFiltered(!isfiltered);
       setDummyList(filteredList);
+      setIsFiltered(!isfiltered);
     }
   }
 
@@ -47,13 +50,17 @@ const Body = () => {
     <Shimmer />
   ) : (
     <div className="">
-      {/* {console.log("JSX Rendered:" + dummyList.length)} */}
       <div className="flex items-center gap-8">
-        <SearchBar />
-        {/* <FilterBtn /> */}
+        <SearchBar
+          searchText={searchText}
+          setSearchText={setSearchText}
+          list={resturantList}
+          setList={setDummyList}
+        />
 
+        {/* <FilterBtn /> */}
         <button
-          className={`border p-2 mt-3 cursor-pointer rounded font-mono text-white  ${
+          className={`border p-2 mt-3 cursor-pointer rounded font-mono text-white focus:outline-white  ${
             isfiltered ? "border-blue-500 bg-blue-500" : "border-black"
           }`}
           onClick={toggleFilter}
